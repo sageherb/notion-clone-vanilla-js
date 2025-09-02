@@ -28,6 +28,7 @@ export default [
       "dot-notation": "warn",
       "prefer-template": "warn",
     },
+    env: { browser: true },
   },
   eslintConfigPrettier,
 ];
