@@ -1,18 +1,29 @@
 export function createRouter() {
-  const routes = {};
+  const routes = [];
+
+  const getRegex = (path) => new RegExp(`^${path.replace(/:id\b/, "([^/]+)")}$`);
+
+  const matchRoute = () => {
+    const { pathname } = location;
+
+    const route = routes.find((route) => route.regex.test(pathname));
+    if (!route) return "404";
+
+    const match = pathname.match(route.regex);
+    if (!match) throw new Error("error");
+
+    const id = match[1];
+
+    const result = { page: route.page };
+    if (id) result.id = decodeURIComponent(id);
+
+    return result;
+  };
 
   return {
-    addRoute: (path, page) => {
-      let param = null;
-
-      const parsedPath = path.replace(/:(\w+)/, (_, paramName) => {
-        param = paramName;
-        return "([^/]+)";
-      });
-
-      const regex = new RegExp(`^${parsedPath}$`);
-
-      routes[path] = { regex, page, param };
+    addRoute(path, page) {
+      const regex = getRegex(path);
+      routes.push({ path, page, regex });
     },
   };
 }
