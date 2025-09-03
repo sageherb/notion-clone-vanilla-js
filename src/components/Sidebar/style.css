@@ -1,0 +1,29 @@
+.document-list {
+  list-style: none;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.document-item {
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.page-info {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-button {
+  width: 20px;
+  text-align: center;
+}
+
+/* 하위 리스트 들여쓰기 */
+.document-item > ul {
+  padding-left: 20px;
+}
+
+.hidden {
+  display: none;
+}

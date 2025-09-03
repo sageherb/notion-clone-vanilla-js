@@ -1,10 +1,15 @@
-import "./style/reset.css";
+import "./styles/reset.css";
 import { createRouter } from "./router";
+import Sidebar from "./components/Sidebar/index.js";
 
+// Sidebar 더미 데이터
 export default function App() {
-  const router = createRouter();
+  const main = document.createElement("main");
 
-  router.addRoute("/", "rootPage");
+  const aside = document.createElement("aside");
+  aside.innerText = "aside";
 
-  return router.getCurrentRoute();
+  main.appendChild(Sidebar());
+
+  return main;
 }
