@@ -10,9 +10,10 @@ export default function App() {
   main.appendChild(Sidebar());
   main.appendChild(Editor());
 
-  router.addRoute("/", "emptyPage");
-  router.addRoute("/documents", "emptyPage");
+  router.addRoute("/", "empty");
+  router.addRoute("/documents", "empty");
   router.addRoute("/documents/:id", main);
+  router.start();
 
   return main;
 }
