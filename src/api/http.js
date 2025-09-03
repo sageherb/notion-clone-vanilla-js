@@ -10,13 +10,13 @@ const request = async ({ url, method = "GET", headers = {}, body }) => {
   }
 
   try {
-    const response = await fetch(url, opts);
+    const response = await fetch(url, options);
 
     if (!response.ok) throw new Error("Request Error");
 
     return await response.json();
-  } catch {
-    throw new Error("Request Error");
+  } catch (error) {
+    throw new Error(`Request Error: ${error.message}`);
   }
 };
 
