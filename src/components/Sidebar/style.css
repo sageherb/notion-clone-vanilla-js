@@ -1,29 +1,143 @@
+#sidebar {
+  width: 240px;
+  min-width: 240px;
+  height: 100vh;
+  background-color: #f7f6f3; /* 노션 기본 배경색 */
+  border-right: 1px solid #e0e0e0;
+  padding: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 혹시 상단에 뭐 추가할 수도 있음 */
+.sidebar-header {
+  padding: 0 16px;
+  margin-bottom: 26px;
+}
+
+#document-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* ul li 기본 목록 스타일 제거 */
 .document-list {
   list-style: none;
   margin: 0;
-  padding-left: 10px;
+  padding: 0;
 }
 
 .document-item {
+  /* 들여쓰기 기본값 */
+  padding-left: 10px;
   cursor: pointer;
-  padding: 5px 0;
 }
 
 .page-info {
   display: flex;
   align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #333;
+  padding: 4px 10px;
+  white-space: nowrap;
+  transition: background-color 0.1s;
 }
 
-.toggle-button {
-  width: 20px;
-  text-align: center;
-}
-
-/* 하위 리스트 들여쓰기 */
-.document-item > ul {
-  padding-left: 20px;
-}
-
+/* 하위 목록이 숨겨져 있을 때 */
 .hidden {
   display: none;
+}
+
+.left-toggle-area {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* 공간 고정 */
+}
+
+/* 접기 펴기 화살표 스타일 */
+.toggle-button {
+  font-size: 10px;
+  color: #777;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/* 페이지 제목 */
+.page-title {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 오른쪽 토글 영역 */
+.right-toggle-area {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.add-child-button,
+.delete-button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #777;
+  border-radius: 4px;
+}
+
+/* 하위 페이지 없음 텍스트 스타일 */
+.no-pages-text {
+  color: #999;
+  font-size: 12px;
+  padding: 4px 10px 4px 36px; /* 들여쓰기 */
+}
+
+/* 최하단 새 페이지 영역 */
+/* 문서 목록의 '새 페이지 추가' 버튼 컨테이너 */
+.bottom-add-page-container {
+  padding: 4px 0;
+}
+
+/* '새 페이지 추가' 버튼을 감싸는 영역 */
+.bottom-add-page-area {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 14px;
+  color: #777;
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    background-color 0.1s,
+    color 0.1s;
+}
+
+/* + 아이콘 */
+.bottom-add-page-button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  color: #777;
+}
+
+/* '새 페이지 추가' 텍스트 */
+.bottom-add-page-text {
+  flex-grow: 1;
+  white-space: nowrap;
 }
