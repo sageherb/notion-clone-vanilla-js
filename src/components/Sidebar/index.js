@@ -1,25 +1,7 @@
 import "./style.css";
+import apiDocs from "../../api/documents";
 
-// 테스트를 위한 더미 데이터
-const TEST_DOCUMENTS = [
-  {
-    id: 1,
-    title: "최상위 페이지",
-    documents: [
-      {
-        id: 2,
-        title: "하위 페이지 1",
-        documents: [],
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "최상위 페이지 2",
-    documents: [],
-  },
-];
-
+// 하단 새 페이지 추가 버튼 생성
 const createAddPageButton = () => {
   const addPageButtonArea = document.createElement("div");
   addPageButtonArea.className = "bottom-add-page-area";
@@ -36,7 +18,58 @@ const createAddPageButton = () => {
   return addPageButtonArea;
 };
 
-const Sidebar = () => {
+// 개별 문서(li) 항목을 생성하는 함수
+const createDocumentItem = (doc) => {
+  const li = document.createElement("li"); // <li>
+  li.className = "document-item";
+  li.dataset.id = doc.id;
+
+  const pageInfo = document.createElement("div");
+  pageInfo.className = "page-info";
+
+  // 좌측, 우측 토글 영역 생성
+  const leftToggleArea = document.createElement("div");
+  leftToggleArea.className = "left-toggle-area";
+  const rightToggleArea = document.createElement("div");
+  rightToggleArea.className = "right-toggle-area";
+
+  // 페이지 제목 영역 생성
+  const pageTitleArea = document.createElement("div");
+  pageTitleArea.className = "page-title-area";
+
+  // 페이지 제목 생성
+  const pageLink = document.createElement("a");
+  pageLink.href = `/documents/${doc.id}`;
+  const pageTitle = document.createElement("span");
+  pageTitle.className = "page-title";
+  pageTitle.textContent = doc.title;
+  pageLink.appendChild(pageTitle);
+  pageTitleArea.appendChild(pageLink);
+
+  // 버튼 요소 생성
+  const toggleButton = document.createElement("span");
+  toggleButton.className = "toggle-button";
+  toggleButton.textContent = "▶";
+  const deleteButton = document.createElement("span");
+  deleteButton.className = "delete-button";
+  deleteButton.textContent = "🗑️";
+  const addButton = document.createElement("span");
+  addButton.className = "add-child-button";
+  addButton.textContent = "+";
+
+  leftToggleArea.appendChild(toggleButton);
+  rightToggleArea.appendChild(deleteButton);
+  rightToggleArea.appendChild(addButton);
+
+  pageInfo.appendChild(leftToggleArea);
+  pageInfo.appendChild(pageTitleArea);
+  pageInfo.appendChild(rightToggleArea);
+  li.appendChild(pageInfo); // </li>
+
+  return li;
+};
+
+const Sidebar = async () => {
   /* 사이드바 기본 구조 생성 */
   // 사이드바 전체를 감싸는 aside 생성
   const sidebarEl = document.createElement("aside");
@@ -45,6 +78,9 @@ const Sidebar = () => {
   // 사이드바 헤더 영역
   const sidebarHeader = document.createElement("div");
   sidebarHeader.className = "sidebar-header";
+  const userNameText = document.createElement("span");
+  userNameText.textContent = `Update의 Notion`;
+  userNameText.className = "user-name";
 
   // 문서 목록을 담을 네비게이션 영역
   const documentListNav = document.createElement("nav");
@@ -56,113 +92,127 @@ const Sidebar = () => {
     ul.className = "document-list";
 
     docs.forEach((doc) => {
-      // 문서DOM 구조 생성
-      const li = document.createElement("li");
-      li.className = "document-item";
-
-      const pageInfo = document.createElement("div");
-      pageInfo.className = "page-info";
-
-      // 문서 제목 영역
-      const pageTitleArea = document.createElement("div");
-      pageTitleArea.className = "page-title-area";
-
-      // 좌측, 우측 토글 아이콘 영역
-      const leftToggleArea = document.createElement("div");
-      leftToggleArea.className = "left-toggle-area";
-
-      const rightToggleArea = document.createElement("div");
-      rightToggleArea.className = "right-toggle-area";
-
-      // 문서 제목
-      const pageTitle = document.createElement("span");
-      pageTitle.className = "page-title";
-      pageTitle.textContent = doc.title;
-      pageTitleArea.appendChild(pageTitle);
-
-      // 접기/펴기
-      const toggleButton = document.createElement("span");
-      toggleButton.className = "toggle-button";
-      toggleButton.textContent = "▶";
-      leftToggleArea.appendChild(toggleButton);
-
-      // 새 문서 추가
-      const addButton = document.createElement("span");
-      addButton.className = "add-child-button";
-      addButton.textContent = "+";
-      rightToggleArea.appendChild(addButton);
-
-      // 휴지통
-      const deleteButton = document.createElement("span");
-      deleteButton.className = "delete-button";
-      deleteButton.textContent = "🗑️";
-      rightToggleArea.appendChild(deleteButton);
-
-      // 토글 버튼 클릭 이벤트 리스너
-      toggleButton.addEventListener("click", (e) => {
-        e.stopPropagation(); // 접기/펴기 버블링 방지
-
-        // 하위 문서가 있는 경우
-        if (doc.documents && doc.documents.length > 0) {
-          const childDoc = li.querySelector("ul");
-          if (childDoc) {
-            childDoc.classList.toggle("hidden");
-            toggleButton.textContent = childDoc.classList.contains("hidden") ? "▶" : "▼";
-          }
-        }
-        // 하위 문서가 없는 경우
-        else {
-          // 이미 '하위 페이지 없음' 문구가 있는지 확인
-          const existingNoPagesText = li.querySelector(".no-pages-text");
-
-          // 이미 있으면 텍스트 제거
-          if (existingNoPagesText) {
-            li.removeChild(existingNoPagesText);
-            toggleButton.textContent = "▶";
-          }
-          // 없으면 텍스트 생성하여 추가
-          else {
-            const noPagesText = document.createElement("span");
-            noPagesText.className = "no-pages-text";
-            noPagesText.textContent = "하위 페이지 없음";
-
-            li.appendChild(noPagesText);
-            toggleButton.textContent = "▼";
-          }
-        }
-      });
-
-      // <div>
-      pageInfo.appendChild(leftToggleArea);
-      pageInfo.appendChild(pageTitle);
-      pageInfo.appendChild(rightToggleArea);
-
-      // <div>
-      li.appendChild(pageInfo);
-
-      // 하위 문서 있으면 기본으로 닫음 상태로 전환
+      const li = createDocumentItem(doc);
+      // 하위 문서 있으면 재귀 호출
       if (doc.documents && doc.documents.length > 0) {
         renderDocuments(li, doc.documents);
         li.querySelector("ul").classList.add("hidden");
       }
 
-      // <li>
       ul.appendChild(li);
     });
-
-    // <ul>
     parent.appendChild(ul);
   };
+  // API 호출 및 렌더링
+  const documents = await apiDocs.getList();
+  console.log(documents);
+  renderDocuments(documentListNav, documents); // 재귀 호출, 하위 문서 있으면 렌더링
 
-  renderDocuments(documentListNav, TEST_DOCUMENTS); // 재귀 호출, 하위 문서 있으면 렌더링
-
-  // 모든 문서 최하단에 [새 페이지 추가] 버튼
+  // 모든 문서의 최하단에 [새 페이지 추가] 버튼
   const BottomAddPageButton = createAddPageButton();
   documentListNav.appendChild(BottomAddPageButton);
 
   /* 렌더링 결과물 추가 */
+  sidebarHeader.appendChild(userNameText);
   sidebarEl.appendChild(sidebarHeader);
   sidebarEl.appendChild(documentListNav);
+
+  // 이벤트리스너(이벤트 위임)
+  sidebarEl.addEventListener("click", async (e) => {
+    const target = e.target;
+    // 접기/펴기 토글 버튼
+    if (target.classList.contains("toggle-button")) {
+      const parentLi = target.closest(".document-item");
+      const childDocs = parentLi.querySelector("ul");
+
+      if (childDocs) {
+        childDocs.classList.toggle("hidden");
+        target.textContent = childDocs.classList.contains("hidden") ? "▶" : "▼";
+      } else {
+        // 하위 페이지가 없는 경우 처리 (토글 시 '하위 페이지 없음' 텍스트)
+        const noPagesText = parentLi.querySelector(".no-pages-text");
+        if (noPagesText) {
+          parentLi.removeChild(noPagesText);
+          target.textContent = "▶";
+        } else {
+          const newNoPagesText = document.createElement("span");
+          newNoPagesText.className = "no-pages-text";
+          newNoPagesText.textContent = "하위 페이지 없음";
+          parentLi.appendChild(newNoPagesText);
+          target.textContent = "▼";
+        }
+      }
+    }
+    // '+' 버튼 클릭
+    else if (target.classList.contains("add-child-button")) {
+      const parentLi = target.closest(".document-item");
+      const parentId = parentLi ? parentLi.dataset.id : null;
+      try {
+        await apiDocs.create({ parent: parentId });
+        const updatedDocuments = await apiDocs.getList();
+
+        // 기존 문서 목록을 비우고 새로운 문서 목록으로 다시 렌더링
+        const documentListNav = document.getElementById("document-list");
+        documentListNav.innerHTML = "";
+        renderDocuments(documentListNav, updatedDocuments);
+        // 모든 문서 최하단에 [새 페이지 추가] 버튼
+        documentListNav.appendChild(BottomAddPageButton);
+
+        // 하위 문서가 보이도록 ul 태그의 hidden 클래스 제거
+        let currentLi = documentListNav.querySelector(`[data-id="${parentId}"]`);
+        if (currentLi) {
+          // 부모 문서부터 상위 노드까지 순회하며 hidden 클래스 제거
+          while (currentLi && currentLi.classList.contains("document-item")) {
+            const childDocsUl = currentLi.querySelector("ul");
+            if (childDocsUl) {
+              childDocsUl.classList.remove("hidden");
+              const toggleButton = currentLi.querySelector(".toggle-button");
+              if (toggleButton) {
+                toggleButton.textContent = "▼";
+              }
+            }
+
+            // 다음 부모 문서로 이동
+            const parentUl = currentLi.parentElement;
+            if (parentUl && parentUl.classList.contains("document-list")) {
+              currentLi = parentUl.closest(".document-item");
+            } else {
+              currentLi = null;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("문서 생성 중 오류", error);
+      }
+    }
+    // '휴지통' 버튼 클릭
+    else if (target.classList.contains("delete-button")) {
+      const parentLi = target.closest(".document-item");
+      const documentId = parentLi ? parentLi.dataset.id : null;
+      if (documentId) {
+        try {
+          await apiDocs.del(documentId);
+          parentLi.remove();
+        } catch (error) {
+          console.error("문서 삭제 중 오류 발생:", error);
+        }
+      }
+    }
+    // 최하단 '새 페이지 추가' 버튼 클릭
+    else if (target.closest(".bottom-add-page-area")) {
+      try {
+        await apiDocs.create({});
+        const updatedDocuments = await apiDocs.getList(); // 기존 문서 목록을 비우고 새로운 문서 목록으로 다시 렌더링
+
+        const documentListNav = document.getElementById("document-list");
+        documentListNav.innerHTML = "";
+        renderDocuments(documentListNav, updatedDocuments);
+        documentListNav.appendChild(BottomAddPageButton);
+      } catch (error) {
+        console.error("루트 문서 생성 중 오류 발생:", error);
+      }
+    }
+  });
 
   // 생성된 aside 요소를 반환
   return sidebarEl;

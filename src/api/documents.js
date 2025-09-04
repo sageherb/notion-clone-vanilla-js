@@ -9,10 +9,11 @@ const getList = () => http.get(BASE_URL, HEADERS);
 
 const get = () => {};
 
-const create = () => {};
+const create = ({ title = "새 페이지", parent = null }) =>
+  http.post(BASE_URL, HEADERS, { title, parent });
 
 const update = () => {};
 
-const del = () => {};
+const del = (id) => http.delete(`${BASE_URL}/${id}`, HEADERS);
 
 export default { getList, get, create, update, del };

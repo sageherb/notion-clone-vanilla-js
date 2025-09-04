@@ -7,7 +7,9 @@ export default function App() {
   const router = createRouter();
 
   const main = document.createElement("main");
-  main.appendChild(Sidebar());
+  Sidebar().then((sidebarEl) => {
+    main.appendChild(sidebarEl);
+  });
   main.appendChild(Editor());
 
   router.addRoute("/", "empty");
