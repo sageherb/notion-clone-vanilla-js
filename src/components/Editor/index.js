@@ -23,10 +23,9 @@ const TEST_DOCUMENTS = [
   },
 ];
 
-export default function Editor() {
+export default function Editor({ id }) {
   /* editor 기본 구조 생성 */
-  const section = document.createElement("section");
-  section.id = "section";
+  const section = document.querySelector("#section");
   // title과 contents를 각각의 div로 구성
   const title = document.createElement("div");
   const contents = document.createElement("div");
@@ -39,7 +38,7 @@ export default function Editor() {
   /* url 에서 id 가져오기 */
   //const id = window.location.pathname.split("/")[2];
   // test용
-  const id = "1";
+  // const id = "1";
 
   /* 문서 내용 렌더링 */
   // 가져온 id를 통해 데이터를 탐색
@@ -58,7 +57,4 @@ export default function Editor() {
 
   title.appendChild(titleText);
   contents.appendChild(contentsText);
-
-  // main 안에 들어갈 section을 만들고, 그 안에 에디터 요소를 만들어 최종 반환
-  return section;
 }

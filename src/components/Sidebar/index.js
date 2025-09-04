@@ -72,8 +72,7 @@ const createDocumentItem = (doc) => {
 const Sidebar = async () => {
   /* 사이드바 기본 구조 생성 */
   // 사이드바 전체를 감싸는 aside 생성
-  const sidebarEl = document.createElement("aside");
-  sidebarEl.id = "sidebar";
+  const sidebarEl = document.querySelector("#sidebar");
 
   // 사이드바 헤더 영역
   const sidebarHeader = document.createElement("div");
@@ -213,9 +212,6 @@ const Sidebar = async () => {
       }
     }
   });
-
-  // 생성된 aside 요소를 반환
-  return sidebarEl;
 };
 
 export default Sidebar;

@@ -1,21 +1,16 @@
 import "./styles/reset.css";
-import Sidebar from "./components/Sidebar/index.js";
+import "./styles/styles.css";
 import { createRouter } from "./router.js";
+import Sidebar from "./components/Sidebar/index.js";
 import Editor from "./components/Editor/index.js";
+import EmptyPage from "./pages/EmptyPage.js";
 
 export default function App() {
   const router = createRouter();
-
-  const main = document.createElement("main");
-  Sidebar().then((sidebarEl) => {
-    main.appendChild(sidebarEl);
-  });
-  main.appendChild(Editor());
-
-  router.addRoute("/", "empty");
-  router.addRoute("/documents", "empty");
-  router.addRoute("/documents/:id", main);
+  router.addRoute("/", () => router.navigate("/documents"));
+  router.addRoute("/documents", () => EmptyPage());
+  router.addRoute("/documents/:id", ({ id }) => Editor({ id }));
   router.start();
 
-  return main;
+  Sidebar();
 }

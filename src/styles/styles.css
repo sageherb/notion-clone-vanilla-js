@@ -1,3 +1,18 @@
-main {
+#app {
   display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.note-detail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.note-detail-placeholder {
+  width: 100px;
+  height: 100px;
+  opacity: 0.1;
 }

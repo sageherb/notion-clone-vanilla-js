@@ -7,44 +7,41 @@ export function createRouter() {
     return new RegExp(`^${pattern}/?$`);
   };
 
-  const matchRoute = () => {
+  const resolveRoute = () => {
     const { pathname } = location;
 
-    const route = routes.find((route) => route.regex.test(pathname));
-    if (!route) return "404";
+    for (const route of routes) {
+      const match = route.regex.exec(pathname);
 
-    const match = pathname.match(route.regex);
-    if (!match) throw new Error("error");
-
-    const id = decodeURIComponent(match[1]);
-
-    // 페이지 미구현
-    // return route.page(id);
-  };
-
-  const handleLinkClick = (e) => {
-    const a = e.target.closest("a");
-    if (a && a.href.startsWith(location.origin)) {
-      e.preventDefault();
-      navigate(a.getAttribute("href"));
+      if (match) {
+        return route.handler({ id: match[1] || null });
+      }
     }
   };
 
   const navigate = (path) => {
     history.pushState(null, null, path);
-    matchRoute();
+    resolveRoute();
+  };
+
+  const handleLinkClick = (event) => {
+    const a = event.target.closest("a");
+    if (a && a.href.startsWith(location.origin)) {
+      event.preventDefault();
+      navigate(a.getAttribute("href"));
+    }
   };
 
   return {
-    addRoute(path, page) {
+    addRoute(path, handler) {
       const regex = getRegex(path);
-      routes.push({ path, page, regex });
+      routes.push({ path, handler, regex });
     },
-
+    navigate,
     start() {
-      window.addEventListener("popstate", matchRoute);
+      window.addEventListener("popstate", resolveRoute);
       document.body.addEventListener("click", handleLinkClick);
-      matchRoute();
+      resolveRoute();
     },
   };
 }
