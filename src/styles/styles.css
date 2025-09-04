@@ -4,14 +4,16 @@
   height: 100vh;
 }
 
-.note-detail {
+.document-detail {
   display: flex;
+  width: 710px;
   justify-content: center;
   align-items: center;
   height: 100%;
+  flex-direction: column;
 }
 
-.note-detail-placeholder {
+.document-detail-placeholder {
   width: 100px;
   height: 100px;
   opacity: 0.1;
