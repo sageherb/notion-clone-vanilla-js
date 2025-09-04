@@ -1,5 +1,9 @@
 import "./style.css";
 import apiDocs from "../../api/documents";
+import underIcon from "/public/assets/under.svg?url";
+import plusIcon from "/public/assets/plus.svg?url";
+import deleteIcon from "/public/assets/trash.svg?url";
+import pageIcon from "/public/assets/page.svg?url";
 
 // 하단 새 페이지 추가 버튼 생성
 const createAddPageButton = () => {
@@ -45,15 +49,18 @@ const createDocumentItem = (doc) => {
   pageTitleArea.appendChild(pageLink);
 
   // 버튼 요소 생성
-  const toggleButton = document.createElement("span");
+  const toggleButton = document.createElement("img");
   toggleButton.className = "toggle-button";
-  toggleButton.textContent = "▶";
-  const deleteButton = document.createElement("span");
+  toggleButton.src = pageIcon;
+  toggleButton.alt = "page Icon";
+  const deleteButton = document.createElement("img");
   deleteButton.className = "delete-button";
-  deleteButton.textContent = "🗑️";
-  const addButton = document.createElement("span");
+  deleteButton.src = deleteIcon;
+  deleteButton.alt = "under Icon";
+  const addButton = document.createElement("img");
   addButton.className = "add-child-button";
-  addButton.textContent = "+";
+  addButton.src = plusIcon;
+  addButton.alt = "under Icon";
 
   leftToggleArea.appendChild(toggleButton);
   rightToggleArea.appendChild(deleteButton);
@@ -102,7 +109,6 @@ const Sidebar = async () => {
   };
   // API 호출 및 렌더링
   const documents = await apiDocs.getList();
-  console.log(documents);
   renderDocuments(documentListNav, documents); // 재귀 호출, 하위 문서 있으면 렌더링
 
   // 모든 문서의 최하단에 [새 페이지 추가] 버튼
@@ -114,7 +120,7 @@ const Sidebar = async () => {
   sidebarEl.appendChild(sidebarHeader);
   sidebarEl.appendChild(documentListNav);
 
-  // 이벤트리스너(이벤트 위임)
+  /* 이벤트리스너(이벤트 위임) */
   sidebarEl.addEventListener("click", async (e) => {
     const target = e.target;
     // 접기/펴기 토글 버튼
@@ -124,20 +130,21 @@ const Sidebar = async () => {
 
       if (childDocs) {
         childDocs.classList.toggle("hidden");
-        target.textContent = childDocs.classList.contains("hidden") ? "▶" : "▼";
+        // 하위 문서의 hidden 클래스 상태에 따라 rotated 클래스를 토글합니다.
+        target.classList.toggle("rotated", !childDocs.classList.contains("hidden"));
       } else {
         // 하위 페이지가 없는 경우 처리 (토글 시 '하위 페이지 없음' 텍스트)
         const noPagesText = parentLi.querySelector(".no-pages-text");
         if (noPagesText) {
           parentLi.removeChild(noPagesText);
-          target.textContent = "▶";
         } else {
           const newNoPagesText = document.createElement("span");
           newNoPagesText.className = "no-pages-text";
           newNoPagesText.textContent = "하위 페이지 없음";
           parentLi.appendChild(newNoPagesText);
-          target.textContent = "▼";
         }
+        // 하위 페이지 유무와 상관없이 버튼 클릭 시 rotated 클래스를 토글합니다.
+        target.classList.toggle("rotated");
       }
     }
     // '+' 버튼 클릭
@@ -158,14 +165,15 @@ const Sidebar = async () => {
         // 하위 문서가 보이도록 ul 태그의 hidden 클래스 제거
         let currentLi = documentListNav.querySelector(`[data-id="${parentId}"]`);
         if (currentLi) {
-          // 부모 문서부터 상위 노드까지 순회하며 hidden 클래스 제거
+          // 부모 문서부터 최상위 문서까지 순회하며 hidden 클래스 제거
           while (currentLi && currentLi.classList.contains("document-item")) {
             const childDocsUl = currentLi.querySelector("ul");
             if (childDocsUl) {
               childDocsUl.classList.remove("hidden");
               const toggleButton = currentLi.querySelector(".toggle-button");
               if (toggleButton) {
-                toggleButton.textContent = "▼";
+                toggleButton.classList.add("rotated");
+                toggleButton.src = underIcon;
               }
             }
 
@@ -207,6 +215,27 @@ const Sidebar = async () => {
         documentListNav.appendChild(BottomAddPageButton);
       } catch (error) {
         console.error("루트 문서 생성 중 오류 발생:", error);
+      }
+    }
+  });
+
+  /* 마우스 호버 이벤트 (이벤트 위임) */
+  sidebarEl.addEventListener("mouseover", (e) => {
+    const documentItem = e.target.closest(".document-item");
+    if (documentItem) {
+      const toggleButton = documentItem.querySelector(".toggle-button");
+      toggleButton.src = underIcon;
+    }
+  });
+  // 마우스 아웃
+  sidebarEl.addEventListener("mouseout", (e) => {
+    const documentItem = e.target.closest(".document-item");
+    if (documentItem && !documentItem.contains(e.relatedTarget)) {
+      const toggleButton = documentItem.querySelector(".toggle-button");
+      // 토글 버튼이 'rotated' 클래스를 가지고 있지 않을 때만 아이콘을 복구시킴
+      // 펼친 상태에서는 화살표로 둔다는 뜻
+      if (toggleButton && !toggleButton.classList.contains("rotated")) {
+        toggleButton.src = pageIcon;
       }
     }
   });

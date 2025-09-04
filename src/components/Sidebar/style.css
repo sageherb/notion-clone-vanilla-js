@@ -34,6 +34,8 @@
   cursor: pointer;
 }
 
+/* 문서 각 영역 */
+
 .page-info {
   display: flex;
   align-items: center;
@@ -43,6 +45,16 @@
   padding: 4px 10px;
   white-space: nowrap;
   transition: background-color 0.1s;
+  border-radius: 4px;
+}
+
+.page-info:hover {
+  background-color: #e9e8e7;
+}
+
+/* 클릭 시 배경색 더 진하게 */
+.page-info:active {
+  background-color: #dcdbdb;
 }
 
 /* 하위 목록이 숨겨져 있을 때 */
@@ -57,7 +69,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0; /* 공간 고정 */
+  flex-shrink: 0;
+  border-radius: 4px; /* 라운드 처리 */
+}
+
+/* 호버 시 배경색 변경 */
+.left-toggle-area:hover {
+  background-color: #dcdbdb;
+}
+
+/* 마우스 클릭 시 배경색 더 진하게 */
+.left-toggle-area:active {
+  background-color: #dcdbdb;
 }
 
 /* 접기 펴기 화살표 스타일 */
@@ -68,6 +91,11 @@
   transition: transform 0.2s;
 }
 
+/* 토글 버튼 회전 효과 */
+.toggle-button.rotated {
+  transform: rotate(-90deg);
+}
+
 /* 페이지 제목 */
 .page-title {
   flex-grow: 1;
@@ -75,7 +103,7 @@
   text-overflow: ellipsis;
 }
 
-/* 페이지 제목 영역을 확장하여 오른쪽 버튼을 밀어내기 */
+/* 문서 제목 영역을 확장하여 오른쪽 버튼을 밀어내기 */
 .page-title-area {
   flex-grow: 1;
   overflow: hidden;
@@ -99,6 +127,18 @@
   flex-shrink: 0;
   opacity: 1;
   transition: opacity 0.2s;
+}
+
+.add-child-button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #777;
+  border-radius: 4px;
+  margin-left: -2px; /* 이 부분을 추가합니다. 음수 값으로 왼쪽으로 이동 */
 }
 
 .add-child-button,
@@ -157,4 +197,29 @@
 .bottom-add-page-text {
   flex-grow: 1;
   white-space: nowrap;
+}
+
+/* 마우스 호버 영역 */
+/* document-item을 포함한 page-info 영역에 마우스를 올렸을 때 */
+
+/* 새 페이지 추가 버튼 영역 */
+.bottom-add-page-area:hover {
+  background-color: #e9e8e7;
+}
+
+/* 기본 상태에서 버튼 영역을 숨기기 */
+.document-item .right-toggle-area {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* document-item에 마우스 올리면 버튼 영역 보임 */
+.document-item .page-info:hover .right-toggle-area {
+  opacity: 1;
+}
+
+/* 호버 시 버튼 색상 변경 */
+.add-child-button:hover,
+.delete-button:hover {
+  background-color: #dcdbdb; /* 버튼 자체에 호버 효과 */
 }
