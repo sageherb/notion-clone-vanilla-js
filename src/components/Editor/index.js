@@ -1,24 +1,31 @@
 import "./style.css";
 import apiDocs from "../../api/documents";
 
+const handleKeyDown = (e) => {
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+
+  const contents = document.querySelector("#contents");
+  contents.value = "\n" + contents.value;
+  contents.focus();
+  contents.setSelectionRange(0, 0);
+};
+
 export default async function Editor({ id }) {
-  /* editor 기본 구조 생성 */
   const section = document.querySelector("#section");
   section.innerHTML = "";
 
   const div = document.createElement("div");
   div.className = "document-detail";
 
-  // title과 contents를 각각의 div로 구성
   const title = document.createElement("h1");
   title.id = "title";
   title.setAttribute("contenteditable", "true");
-  // title.setAttribute("data-placeholder", "새 페이지");
+  title.setAttribute("placeholder", "새 페이지");
+  title.addEventListener("keydown", handleKeyDown);
 
   const contents = document.createElement("textarea");
   contents.id = "contents";
-  // contents.setAttribute("contenteditable", "true");
-  // contents.setAttribute("data-placeholder", "내용을 입력하세요.");
 
   div.appendChild(title);
   div.appendChild(contents);
