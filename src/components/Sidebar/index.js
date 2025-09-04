@@ -167,7 +167,6 @@ const Sidebar = async () => {
       try {
         await apiDocs.create({ parent: parentId });
         const updatedDocuments = await apiDocs.getList();
-        navigate(`/documents/${newDoc.id}`);
         // 기존 문서 목록을 비우고 새로운 문서 목록으로 다시 렌더링
         const documentListNav = document.getElementById("document-list");
         documentListNav.innerHTML = "";
@@ -199,6 +198,7 @@ const Sidebar = async () => {
             }
           }
         }
+        navigate(`/documents/${newDoc.id}`);
       } catch (error) {
         console.error("문서 생성 중 오류", error);
       }
@@ -221,12 +221,12 @@ const Sidebar = async () => {
       try {
         await apiDocs.create({});
         const updatedDocuments = await apiDocs.getList(); // 기존 문서 목록을 비우고 새로운 문서 목록으로 다시 렌더링
-        navigate(`/documents/${newDoc.id}`);
 
         const documentListNav = document.getElementById("document-list");
         documentListNav.innerHTML = "";
         renderDocuments(documentListNav, updatedDocuments);
         documentListNav.appendChild(BottomAddPageButton);
+        navigate(`/documents/${newDoc.id}`);
       } catch (error) {
         console.error("루트 문서 생성 중 오류 발생:", error);
       }
