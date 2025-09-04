@@ -40,10 +40,8 @@ const createDocumentItem = (doc) => {
   // 페이지 제목 생성
   const pageLink = document.createElement("a");
   pageLink.href = `/documents/${doc.id}`;
-  const pageTitle = document.createElement("span");
-  pageTitle.className = "page-title";
-  pageTitle.textContent = doc.title;
-  pageLink.appendChild(pageTitle);
+  pageLink.textContent = doc.title;
+  pageLink.className = "page-title";
   pageTitleArea.appendChild(pageLink);
 
   // 버튼 요소 생성
