@@ -4,6 +4,7 @@ import underIcon from "/public/assets/under.svg?url";
 import plusIcon from "/public/assets/plus.svg?url";
 import deleteIcon from "/public/assets/trash.svg?url";
 import pageIcon from "/public/assets/page.svg?url";
+import svg from "/public/assets/write.svg?url";
 
 // 하단 새 페이지 추가 버튼 생성
 const createAddPageButton = () => {
@@ -82,9 +83,18 @@ const Sidebar = async () => {
   // 사이드바 헤더 영역
   const sidebarHeader = document.createElement("div");
   sidebarHeader.className = "sidebar-header";
+  const userIcon = document.createElement("div");
+  userIcon.textContent = `U`;
+  userIcon.className = "user-icon";
   const userNameText = document.createElement("span");
   userNameText.textContent = `Update의 Notion`;
   userNameText.className = "user-name";
+  const newPageIcon = document.createElement("div");
+  newPageIcon.className = "newpage-icon";
+  const newpageImg = document.createElement("img");
+  newpageImg.src = `${svg}`;
+  newpageImg.alt = "Write Icon";
+  newpageImg.className = "newpage-icon-img";
 
   // 문서 목록을 담을 네비게이션 영역
   const documentListNav = document.createElement("nav");
@@ -116,7 +126,10 @@ const Sidebar = async () => {
   documentListNav.appendChild(BottomAddPageButton);
 
   /* 렌더링 결과물 추가 */
+  sidebarHeader.appendChild(userIcon);
   sidebarHeader.appendChild(userNameText);
+  sidebarHeader.appendChild(newPageIcon);
+  newPageIcon.appendChild(newpageImg);
   sidebarEl.appendChild(sidebarHeader);
   sidebarEl.appendChild(documentListNav);
 

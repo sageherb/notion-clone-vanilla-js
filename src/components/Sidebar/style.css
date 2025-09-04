@@ -9,10 +9,37 @@
   flex-direction: column;
 }
 
-/* 혹시 상단에 뭐 추가할 수도 있음 */
+/* 사이드바 헤더 영역 */
 .sidebar-header {
   padding: 0 16px;
   margin-bottom: 26px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-icon {
+  border-radius: 15%;
+  width: 20px;
+  height: 20px;
+  background-color: #e0e0e0a5;
+  color: #81807d;
+  text-align: center;
+  font-weight: bold;
+}
+
+.user-name {
+  margin-right: 30px;
+  font-weight: bold;
+  color: #32302b;
+}
+
+.newpage-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.newpage-icon-img {
+  color: #32302b;
 }
 
 #document-list {
