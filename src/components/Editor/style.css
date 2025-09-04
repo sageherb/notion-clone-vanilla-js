@@ -7,11 +7,7 @@
 
 #title {
   margin-top: 150px;
-
   margin-left: 90px;
-  /* 좌우 반응형 실패
-  margin-right: auto;
-  width: 85%;  */
   height: 50px;
 }
 
