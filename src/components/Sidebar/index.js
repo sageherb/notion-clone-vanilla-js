@@ -154,7 +154,7 @@ const Sidebar = async () => {
       try {
         await apiDocs.create({ parent: parentId });
         const updatedDocuments = await apiDocs.getList();
-
+        navigate(`/documents/${newDoc.id}`);
         // 기존 문서 목록을 비우고 새로운 문서 목록으로 다시 렌더링
         const documentListNav = document.getElementById("document-list");
         documentListNav.innerHTML = "";
@@ -208,6 +208,7 @@ const Sidebar = async () => {
       try {
         await apiDocs.create({});
         const updatedDocuments = await apiDocs.getList(); // 기존 문서 목록을 비우고 새로운 문서 목록으로 다시 렌더링
+        navigate(`/documents/${newDoc.id}`);
 
         const documentListNav = document.getElementById("document-list");
         documentListNav.innerHTML = "";
