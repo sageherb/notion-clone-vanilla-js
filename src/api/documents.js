@@ -1,4 +1,4 @@
-import http from "./http";
+import http from "@/api/http";
 
 const BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
 const HEADERS = {
