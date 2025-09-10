@@ -11,6 +11,7 @@
   align-items: center;
   height: 100%;
   flex-direction: column;
+  display: flow-root;
 }
 
 .document-detail-placeholder {
