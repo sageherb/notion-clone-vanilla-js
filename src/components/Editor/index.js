@@ -14,4 +14,11 @@ export default async function Editor({ id }) {
   const content = document.querySelector(".content");
   title.innerText = data.title || "";
   content.innerText = data.content || "";
+
+  const getBody = () => ({ title: title.innerText, content: content.innerText });
+  const handleTitleKeyup = () => {
+    http.update(id, getBody());
+  };
+
+  title.addEventListener("keyup", handleTitleKeyup);
 }
