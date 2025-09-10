@@ -26,7 +26,14 @@ export default async function Editor({ id }) {
       content.focus();
     }
   };
+  const handleTitlePaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text/plain");
+    content.innerText = pasteData + "\n" + content.innerText;
+    content.focus();
+  };
 
   title.addEventListener("keyup", handleTitleKeyup);
   title.addEventListener("keydown", handleTitleKeydown);
+  title.addEventListener("paste", handleTitlePaste);
 }
