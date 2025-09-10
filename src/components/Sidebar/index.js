@@ -75,7 +75,7 @@ const createDocumentItem = (doc) => {
   return li;
 };
 
-const Sidebar = async () => {
+const Sidebar = async ({ navigate }) => {
   /* 사이드바 기본 구조 생성 */
   // 사이드바 전체를 감싸는 aside 생성
   const sidebarEl = document.querySelector("#sidebar");

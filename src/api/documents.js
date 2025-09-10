@@ -12,7 +12,7 @@ const get = (id) => http.get(`${BASE_URL}/${id}`, HEADERS);
 const create = ({ title = "새 페이지", parent = null }) =>
   http.post(BASE_URL, HEADERS, { title, parent });
 
-const update = () => {};
+const update = (id, body) => http.put(`${BASE_URL}/${id}`, HEADERS, body);
 
 const del = (id) => http.delete(`${BASE_URL}/${id}`, HEADERS);
 

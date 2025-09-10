@@ -1,16 +1,6 @@
 import "./style.css";
 import apiDocs from "../../api/documents";
 
-const handleKeyDown = (e) => {
-  if (e.key !== "Enter") return;
-  e.preventDefault();
-
-  const contents = document.querySelector("#contents");
-  contents.value = "\n" + contents.value;
-  contents.focus();
-  contents.setSelectionRange(0, 0);
-};
-
 export default async function Editor({ id }) {
   const section = document.querySelector("#section");
   section.innerHTML = "";
@@ -22,7 +12,6 @@ export default async function Editor({ id }) {
   title.id = "title";
   title.setAttribute("contenteditable", "true");
   title.setAttribute("placeholder", "새 페이지");
-  title.addEventListener("keydown", handleKeyDown);
 
   const contents = document.createElement("textarea");
   contents.id = "contents";
@@ -46,4 +35,35 @@ export default async function Editor({ id }) {
   } else {
     contents.value = docData.content;
   }
+
+  const getBody = () => {
+    const title = document.querySelector("#title").innerText;
+    const contents = document.querySelector("#contents").value;
+
+    return { title, content: contents };
+  };
+
+  const saveNow = async () => {
+    try {
+      const body = getBody();
+      console.log(">>>>>>>>>>>>>>>", id, body);
+      await apiDocs.update(id, body);
+    } catch (err) {
+      console.error("저장 실패:", err);
+    }
+  };
+
+  title.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      contents.value = "\n" + contents.value;
+      contents.focus();
+      contents.setSelectionRange(0, 0);
+    }
+    setTimeout(saveNow, 0);
+  });
+
+  contents.addEventListener("keydown", () => {
+    setTimeout(saveNow(id), 0);
+  });
 }

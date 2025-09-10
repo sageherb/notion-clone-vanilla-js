@@ -7,10 +7,11 @@ import EmptyPage from "./pages/EmptyPage.js";
 
 export default function App() {
   const router = createRouter();
+
   router.addRoute("/", () => router.navigate("/documents"));
   router.addRoute("/documents", () => EmptyPage());
   router.addRoute("/documents/:id", ({ id }) => Editor({ id }));
   router.start();
 
-  Sidebar();
+  Sidebar({ navigate: (path) => router.navigate(path) });
 }
