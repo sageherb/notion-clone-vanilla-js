@@ -19,6 +19,14 @@ export default async function Editor({ id }) {
   const handleTitleKeyup = () => {
     http.update(id, getBody());
   };
+  const handleTitleKeydown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      content.innerText = "\n" + content.innerText;
+      content.focus();
+    }
+  };
 
   title.addEventListener("keyup", handleTitleKeyup);
+  title.addEventListener("keydown", handleTitleKeydown);
 }
