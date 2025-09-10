@@ -6,12 +6,22 @@ import eslintConfigPrettier from "eslint-config-prettier";
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
-    plugins: { js },
-    extends: [js.configs.recommended, eslintConfigPrettier],
+    plugins: {
+      import: require("eslint-plugin-import"),
+    },
+    extends: [js.configs.recommended, eslintConfigPrettier, "plugin:import/recommended"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: globals.browser,
+    },
+    settings: {
+      "import/resolver": {
+        alias: {
+          map: [["@", "./src"]],
+          extensions: [".js", ".mjs", ".cjs"],
+        },
+      },
     },
     rules: {
       "no-undef": "error",
@@ -33,6 +43,15 @@ export default defineConfig([
       "object-shorthand": ["warn", "always"],
       "dot-notation": "warn",
       "prefer-template": "warn",
+      "import/no-unresolved": "error",
+      "import/order": [
+        "warn",
+        {
+          groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+          "newlines-between": "always",
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
     },
   },
 ]);
