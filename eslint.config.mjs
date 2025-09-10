@@ -17,10 +17,7 @@ export default defineConfig([
     },
     settings: {
       "import/resolver": {
-        alias: {
-          map: [["@", "./src"]],
-          extensions: [".js", ".mjs", ".cjs"],
-        },
+        vite: true,
       },
     },
     rules: {
@@ -44,14 +41,6 @@ export default defineConfig([
       "dot-notation": "warn",
       "prefer-template": "warn",
       "import/no-unresolved": "error",
-      "import/order": [
-        "warn",
-        {
-          groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
-        },
-      ],
     },
   },
 ]);
