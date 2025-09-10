@@ -12,6 +12,6 @@ export default async function Editor({ id }) {
   const data = await http.get(id);
   const title = document.querySelector(".title");
   const content = document.querySelector(".content");
-  title.innerText = data.title;
-  content.innerText = data.content;
+  title.innerText = data.title || "";
+  content.innerText = data.content || "";
 }
