@@ -7,35 +7,31 @@
   justify-content: center;
 }
 
-#title {
+.title {
   width: 100%;
   white-space: break-spaces;
   word-break: break-word;
   color: rgb(50, 48, 44);
   font-size: 2.5em;
+  letter-spacing: -0.02em;
   font-weight: 700;
   cursor: text;
   line-height: 1.2;
   margin-top: 160px;
-  position: sticky;
   outline: none;
+  position: relative;
 }
 
-/* #title[data-empty="true"]::after {
+.title:has(br:only-child)::before {
   content: attr(data-placeholder);
-  position: absolute;
-  inset: 0 auto auto 0;
-  color: #aaa;
+  opacity: 0.15;
   pointer-events: none;
-  user-select: none;
-} */
-
-#title[contenteditable="true"]:empty:before {
-  content: "새 페이지";
-  color: #aaa;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-#contents {
+.content {
   display: block;
   width: 100%;
   height: 100%;
