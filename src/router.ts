@@ -1,7 +1,13 @@
-export function createRouter() {
-  const routes = [];
+type Route = {
+  path: string;
+  handler: (id?: string) => void | Promise<void>;
+  regex: RegExp;
+};
 
-  const getRegex = (path) => {
+export function createRouter() {
+  const routes: Route[] = [];
+
+  const getRegex = (path: string) => {
     const pattern = path.replace(/:id\b/, "([^/]+)");
     if (pattern === "/") return /^\/$/;
     return new RegExp(`^${pattern}/?$`);
@@ -12,28 +18,32 @@ export function createRouter() {
 
     for (const route of routes) {
       const match = route.regex.exec(pathname);
+      if (!match) continue;
 
-      if (match) {
-        return route.handler({ id: match[1] || null });
-      }
+      const id = match[1];
+      if (id) route.handler(id);
+      else route.handler();
+      return;
     }
   };
 
-  const navigate = (path) => {
-    history.pushState(null, null, path);
+  const navigate = (path: string) => {
+    history.pushState(null, "", path);
     resolveRoute();
   };
 
-  const handleLinkClick = (event) => {
-    const a = event.target.closest("a");
+  const handleLinkClick = (event: PointerEvent) => {
+    const t = event.target as HTMLElement;
+    const a = t.closest("a");
     if (a && a.href.startsWith(location.origin)) {
       event.preventDefault();
-      navigate(a.getAttribute("href"));
+      const href = a.getAttribute("href");
+      if (href) navigate(href);
     }
   };
 
   return {
-    addRoute(path, handler) {
+    addRoute(path: Route["path"], handler: Route["handler"]) {
       const regex = getRegex(path);
       routes.push({ path, handler, regex });
     },
